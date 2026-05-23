@@ -1,12 +1,10 @@
-package com.example.nocoolshield;
+package com.usuario.nocoolshield;
 
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
+import net.minecraftforge.fml.common.Mod;
 
 @Mod(NoCoolShield.MODID)
 public class NoCoolShield {
@@ -14,21 +12,15 @@ public class NoCoolShield {
     public static final String MODID = "nocoolshield";
 
     public NoCoolShield() {
-        System.out.println("No Cool Shield cargado");
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @EventBusSubscriber(modid = MODID)
-    public static class Events {
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
 
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
 
-            if (event.phase != TickEvent.Phase.END) return;
-
-            Player player = event.player;
-
-            // elimina cooldown del escudo constantemente
-            player.getCooldowns().removeCooldown(Items.SHIELD);
-        }
+        // Quitar cooldown del escudo
+        event.player.getCooldowns().removeCooldown(Items.SHIELD);
     }
 }
