@@ -1,38 +1,34 @@
+package com.example.nocoolshield;
 
-package com.usuario.nocoolshield;
-
-import net.minecraft.world.item.Items;
-import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 
-@Mod("nocoolshield")
+@Mod(NoCoolShield.MODID)
 public class NoCoolShield {
 
+    public static final String MODID = "nocoolshield";
+
     public NoCoolShield() {
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(this);
+        System.out.println("No Cool Shield cargado");
     }
 
-    @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    @EventBusSubscriber(modid = MODID)
+    public static class Events {
 
-        Player player = event.player;
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
+        public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 
-        // 🔥 quitar cooldown del escudo
-        player.getCooldowns().removeCooldown(Items.SHIELD);
+            if (event.phase != TickEvent.Phase.END) return;
 
-        // 🔥 reset delay de bloqueo (si existe en tu versión)
-        try {
-            var f1 = Player.class.getDeclaredField("shieldBlockingDelay");
-            f1.setAccessible(true);
-            f1.setInt(player, 0);
+            Player player = event.player;
 
-            var f2 = Player.class.getDeclaredField("shieldBlockedDelay");
-            f2.setAccessible(true);
-            f2.setInt(player, 0);
-
-        } catch (Exception ignored) {}
+            // elimina cooldown del escudo constantemente
+            player.getCooldowns().removeCooldown(Items.SHIELD);
+        }
     }
 }
