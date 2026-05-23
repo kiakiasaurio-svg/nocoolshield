@@ -1,0 +1,9 @@
+modLoader="javafml"
+loaderVersion="[26,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="nocoolshield"
+version="1.0"
+displayName="No Cool Shield"
+description="Removes shield delay"
